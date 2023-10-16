@@ -66,9 +66,16 @@ local plugins = {
 	},
 	{
 		"aserowy/tmux.nvim",
-		config = function ()
+		config = function()
 			return require("tmux").setup()
 		end
+	},
+	{
+		"ellisonleao/gruvbox.nvim",
+		priority = 1000,
+		config = function ()
+			require("custom.configs.colorschemes.gruvbox")
+		end,
 	}
 
 }
