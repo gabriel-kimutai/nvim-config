@@ -42,7 +42,8 @@ P.S. You can delete this when you're done too. It's your config now :)
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-
+-- Call neovide
+require('custom.configs.neovide')
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -248,7 +249,7 @@ vim.o.clipboard = 'unnamedplus'
 vim.o.breakindent = true
 
 -- Save undo history
-vim.o.undofile = true
+-- vim.o.undofile = true
 
 -- Case-insensitive searching UNLESS \C or capital in search
 vim.o.ignorecase = true
@@ -278,9 +279,11 @@ vim.o.termguicolors = true
 
 vim.o.wrap = false
 
-vim.o.tabstop = 4
-vim.o.shiftwidth = 4
-vim.o.expandtab = true
+-- vim.o.tabstop = 4
+-- vim.o.shiftwidth = 4
+-- vim.o.expandtab = true
+
+vim.o.relativenumber = true
 
 -- [[ Basic Keymaps ]]
 
@@ -288,6 +291,9 @@ vim.o.expandtab = true
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('i', 'jj', '<Esc>', { silent = true })
+
+
+vim.keymap.set('n', '<leader>f', '<cmd>Neotree toggle<CR>', { silent = true })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
