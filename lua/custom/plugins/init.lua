@@ -10,24 +10,6 @@ local plugins = {
 		end
 	},
 	{
-		"rust-lang/rust.vim",
-		ft = "css",
-		init = function()
-			vim.g.rustfmt_autosave = 1
-		end
-	},
-	{
-		"simrat39/rust-tools.nvim",
-		ft = "lamo",
-		dependencies = "neovim/nvim-lspconfig",
-		opts = function()
-			return require "custom.configs.rust-tools"
-		end,
-		config = function(_, opts)
-			require('rust-tools').setup(opts)
-		end
-	},
-	{
 		"windwp/nvim-autopairs",
 		-- Optional dependency
 		dependencies = { 'hrsh7th/nvim-cmp' },
@@ -90,17 +72,6 @@ local plugins = {
 		end
 	},
 	{
-		"willothy/nvim-cokeline",
-		dependencies = {
-			"nvim-lua/plenary.nvim", -- Required for v0.4.0+
-			-- "kyazdani42/nvim-web-devicons", -- If you want devicons
-			"stevearc/resession.nvim" -- Optional, for persistent history
-		},
-		config = function()
-			require("custom.configs.cokeline")
-		end
-	},
-	{
 		"adalessa/laravel.nvim",
 		dependencies = {
 			"nvim-telescope/telescope.nvim",
@@ -128,9 +99,24 @@ local plugins = {
 		end,
 	},
 	{
-		{
-			'jwalton512/vim-blade'
-		}
+		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 1000,
+		config = function()
+			require "custom.configs.colorschemes.catppuccin"
+		end
+	},
+	{
+		"utilyre/barbecue.nvim",
+		name = "barbecue",
+		version = "*",
+		dependencies = {
+			"SmiteshP/nvim-navic",
+			"nvim-tree/nvim-web-devicons", -- optional dependency
+		},
+		opts = {
+			-- configurations go here
+		},
 	}
 
 }
