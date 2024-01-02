@@ -6,6 +6,7 @@
 -- be extended to other languages as well. That's why it's called
 -- kickstart.nvim and not kitchen-sink.nvim ;)
 
+
 return {
   -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
@@ -23,24 +24,58 @@ return {
   },
   config = function()
     local dap = require 'dap'
+    vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'ErrorMsg' })
+    vim.fn.sign_define('DapStopped', { text = '', texthl = 'Folded' })
     local dapui = require 'dapui'
+    --[[ dap.adapters.codelldb = {
+    type = 'server',
+    host = '127.0.0.1',
+    port = "${port}", -- 💀 Use the port printed out or specified with `--port`,
+      executable = {
+        command = '/home/gabriel/.local/bin/codelldb/extension/adapter/codelldb',
+        args = {"--port", "${port}"}
+      }
+    }
 
-    require('mason-nvim-dap').setup {
+    dap.configurations.cpp = {
+      {
+        name = "Launch file",
+        type = "codelldb",
+        request = "launch",
+        program = function ()
+          local path = vim.fn.input({
+            prompt = 'Path to executable: ',
+            default = vim.fn.getcwd() .. '/',
+            completion = 'file'
+          })
+          return (path and path ~="") and path or dap.ABORT
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false
+      }
+    }
+    dap.configurations.c = dap.configurations.cpp ]]
+
+    require('mason-nvim-dap').setup({
       -- Makes a best effort to setup the various debuggers with
       -- reasonable debug configurations
       automatic_setup = true,
 
       -- You can provide additional configuration to the handlers,
       -- see mason-nvim-dap README for more information
-      handlers = {},
-
+      handlers = {
+        function(config)
+          require('mason-nvim-dap').default_setup(config)
+        end,
+      },
+      automatic_installation = true,
       -- You'll need to check that you have the required things installed
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
       },
-    }
+    })
 
     -- Basic debugging keymaps, feel free to change to your liking!
     vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })

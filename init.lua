@@ -550,19 +550,19 @@ require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
 cmp.setup {
-  matching = {
-    disallow_fuzzy_matching = false,
-    disallow_partial_matching = false,
-  },
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
     end,
   },
   window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
-    border = "single"
+    completion = cmp.config.window.bordered({
+      border = "single"
+    }),
+    documentation = cmp.config.window.bordered({
+      border = "single"
+    }),
+    
   },
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),
