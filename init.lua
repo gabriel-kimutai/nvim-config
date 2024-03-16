@@ -87,16 +87,19 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {
-        text = {
-          spinner = "meter"
-        },
-        window = {
-          blend = 0,
-          border = "single"
+      {
+        'j-hui/fidget.nvim',
+        tag = 'legacy',
+        opts = {
+          text = {
+            spinner = "meter"
+          },
+          window = {
+            blend = 0,
+            border = "single"
+          }
         }
-      }
-    },
+      },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -120,7 +123,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -173,7 +176,7 @@ require('lazy').setup({
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
-    config = function ()
+    config = function()
       require("custom.configs.lualine")
     end
   },
@@ -223,8 +226,8 @@ require('lazy').setup({
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
-   require 'kickstart.plugins.autoformat',
-   require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.autoformat',
+  require 'kickstart.plugins.debug',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
@@ -288,9 +291,10 @@ vim.o.termguicolors = true
 
 vim.o.wrap = false
 
--- vim.o.tabstop = 4
--- vim.o.shiftwidth = 4
--- vim.o.expandtab = true
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+vim.o.softtabstop = 4
+vim.o.expandtab = true
 
 vim.o.relativenumber = true
 
@@ -300,6 +304,14 @@ vim.o.relativenumber = true
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('i', 'jj', '<Esc>', { silent = true })
+
+local opts = { silent = true }
+-- Better paste
+vim.keymap.set("v", "p", '"_dP', opts)
+-- Visual --
+-- Stay in indent mode
+vim.keymap.set("v", "<", "<gv", opts)
+vim.keymap.set("v", ">", ">gv", opts)
 
 
 vim.keymap.set('n', '<leader>f', '<cmd>Neotree toggle<CR>', { silent = true })
@@ -342,7 +354,7 @@ vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
     winblend = 0,
-    previewer = true,
+    previewer = false,
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
 
@@ -366,9 +378,9 @@ vim.defer_fn(function()
     auto_install = false,
 
     highlight = { enable = true },
-    indent = { 
+    indent = {
       enable = true,
-      disable = {'c'}
+      disable = { 'c' }
     },
     incremental_selection = {
       enable = true,
@@ -526,10 +538,25 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
+local lspconfig = require("lspconfig")
+
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
 }
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+  vim.lsp.handlers.hover, {
+    border = "single"
+  }
+)
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+  vim.lsp.handlers.signature_help, {
+    border = "single"
+  }
+)
+
+vim.filetype.add({ extension = { templ = "templ" } })
+
 
 mason_lspconfig.setup_handlers {
   function(server_name)
@@ -541,6 +568,12 @@ mason_lspconfig.setup_handlers {
     }
   end,
 }
+lspconfig.html.setup({
+  filetypes = { "html", "templ" }
+})
+lspconfig.htmx.setup({
+  filetypes = { "html", "templ" }
+})
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
@@ -562,7 +595,7 @@ cmp.setup {
     documentation = cmp.config.window.bordered({
       border = "single"
     }),
-    
+
   },
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),

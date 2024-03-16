@@ -24,7 +24,7 @@ return {
   },
   config = function()
     local dap = require 'dap'
-    vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'ErrorMsg' })
+    vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'Error' })
     vim.fn.sign_define('DapStopped', { text = '', texthl = 'Folded' })
     local dapui = require 'dapui'
     --[[ dap.adapters.codelldb = {
