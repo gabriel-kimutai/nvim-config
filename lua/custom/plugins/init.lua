@@ -54,6 +54,13 @@ local plugins = {
 		end,
 	},
 	{
+		"rose-pine/neovim",
+		priority = 1000,
+		config = function()
+			require("custom.configs.colorschemes.rose-pine")
+		end,
+	},
+	{
 		"nvim-neo-tree/neo-tree.nvim",
 		branch = "v3.x",
 		dependencies = {
@@ -110,7 +117,11 @@ local plugins = {
 		end
 
 
+	},
+	{
+		"nvim-neotest/nvim-neo"
 	}
+
 
 }
 
