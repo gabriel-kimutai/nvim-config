@@ -40,23 +40,8 @@ P.S. You can delete this when you're done too. It's your config now :)
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
---  LSP TEST
 
-local client = vim.lsp.start_client {
-  name = "educational_lsp",
-  cmd = { "/home/gabriel/programming/educational_lsp/main" },
-}
 
-if not client then
-  vim.notify("LMAO")
-end
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "markdown",
-  callback = function ()
-    vim.lsp.buf_attach_client(0, client)
-  end
-})
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
