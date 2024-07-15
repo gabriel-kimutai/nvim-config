@@ -40,6 +40,24 @@ P.S. You can delete this when you're done too. It's your config now :)
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+--  LSP TEST
+
+local client = vim.lsp.start_client {
+  name = "educational_lsp",
+  cmd = { "/home/gabriel/programming/educational_lsp/main" },
+}
+
+if not client then
+  vim.notify("LMAO")
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function ()
+    vim.lsp.buf_attach_client(0, client)
+  end
+})
+
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 -- Call neovide
@@ -89,20 +107,16 @@ require('lazy').setup({
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       {
         'j-hui/fidget.nvim',
-        tag = 'legacy',
         opts = {
-          text = {
-            spinner = "meter"
-          },
-          window = {
-            blend = 0,
-            border = "single"
-          }
-        }
+        },
+        config = function()
+          require "custom.configs.fidget"
+        end
       },
-
-      -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
+      {
+        -- Additional lua configuration, makes nvim stuff amazing!
+        'folke/neodev.nvim',
+      },
     },
   },
 
@@ -116,6 +130,7 @@ require('lazy').setup({
 
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-path',
 
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
@@ -294,9 +309,13 @@ vim.o.wrap = false
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.softtabstop = 4
-vim.o.expandtab = true
+vim.o.expandtab = false
 
 vim.o.relativenumber = true
+
+vim.g.netrw_keepdir = 0
+vim.g.netrw_winsize = 30
+vim.g.netrw_banner = 0
 
 -- [[ Basic Keymaps ]]
 
@@ -314,7 +333,7 @@ vim.keymap.set("v", "<", "<gv", opts)
 vim.keymap.set("v", ">", ">gv", opts)
 
 
-vim.keymap.set('n', '<leader>f', '<cmd>Neotree toggle<CR>', { silent = true })
+vim.keymap.set('n', '<leader>f', '<cmd>Oil --float<CR>', { silent = true, desc = "Open Oil.nvim in float" })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
@@ -563,6 +582,7 @@ vim.filetype.add({ extension = { templ = "templ" } })
 
 mason_lspconfig.setup_handlers {
   function(server_name)
+    local server_config = {}
     require('lspconfig')[server_name].setup {
       capabilities = capabilities,
       on_attach = on_attach,
@@ -571,13 +591,8 @@ mason_lspconfig.setup_handlers {
     }
   end,
 }
-lspconfig.html.setup({
-  filetypes = { "html", "templ" }
-})
-lspconfig.htmx.setup({
-  filetypes = { "html", "templ" }
-})
 
+require("custom.configs.lspconfig")
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
 local cmp = require 'cmp'
@@ -632,6 +647,7 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'path' },
   },
 }
 

@@ -27,7 +27,7 @@ return {
     vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'Error' })
     vim.fn.sign_define('DapStopped', { text = '', texthl = 'Folded' })
     local dapui = require 'dapui'
-    --[[ dap.adapters.codelldb = {
+    dap.adapters.codelldb = {
     type = 'server',
     host = '127.0.0.1',
     port = "${port}", -- 💀 Use the port printed out or specified with `--port`,
@@ -54,7 +54,7 @@ return {
         stopOnEntry = false
       }
     }
-    dap.configurations.c = dap.configurations.cpp ]]
+    dap.configurations.c = dap.configurations.cpp
 
     require('mason-nvim-dap').setup({
       -- Makes a best effort to setup the various debuggers with

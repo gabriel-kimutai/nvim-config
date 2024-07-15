@@ -1,3 +1,4 @@
 require("notify").setup({
-  background_colour = "#000000",
+  background_colour = "#ffffff",
+  max_width = 30
 })

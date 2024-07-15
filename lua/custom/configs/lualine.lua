@@ -1,7 +1,7 @@
 require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = 'auto',
+    theme = 'jellybeans',
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
     disabled_filetypes = {
@@ -50,7 +50,8 @@ require('lualine').setup {
   },
   tabline = {
   },
-  winbar = {},
+  winbar = {
+  },
   inactive_winbar = {},
   extensions = {
       "neo-tree",
